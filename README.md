@@ -1,11 +1,11 @@
 # Bluver-view
-import axios from 'axios';
-
-const api = axios.create({
-    baseURL: 'http://localhost:3000'
+router.get('/posts', async (req, res) => {
+    const posts = await Post.find().sort({ createdAt: -1 }).populate('userId', 'username profilePicture');
+    res.json(posts);
 });
 
-// Example usage
-api.get('/posts').then(response => {
-    console.log(response.data);
+router.get('/profile/:userId', async (req, res) => {
+    const user = await User.findById(req.params.userId);
+    const posts = await Post.find({ userId: req.params.userId });
+    res.json({ user, posts });
 });
